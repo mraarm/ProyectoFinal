@@ -49,7 +49,7 @@ app.use('/', routes);
 
 // Ponemos expres-session para contraolar las sesiiones de los usuarios
 app.use(session({
-    secret: '90asuDÂ8375SD*AS414D¿67665485768536244512343*ASD2341234oKA?jpAISDN32412341SAUIDKnDSA',
+    secret: '3jn4jb3k5b43kjb*¨P?=)·LjnsjdkS·KDF',
     saveUninitialized: false, 
     resave: true
 })); 

@@ -20,6 +20,9 @@ const url = require('url');
 mongoose.connect('mongodb://localhost/nodejs', { useNewUrlParser: true })
     .then(() => {
         console.log("Conexion con MongoDB correcta");
+    })
+    .catch((err) => {
+        console.error(err); 
     });
 /* -----------------           FIN             -----------------*/
 
@@ -80,7 +83,25 @@ router.get('/singup',(req, res) => {
 
 // Ruta para el Singup, guarda los datos en la base de datos
 router.post('/singup', (req, res) => {
-    
+    console.log("Comprovando datos para hacer el SINGUP\n");
+    // Creamos una variable donde se guardara los parametros
+    let body = ''; 
+    // Cada vez que recibimos un chunk (stream que contiene los datos)
+    req.on('data', (data) => {
+        console.log("Recibiendo datos"/*, data.toString()*/);
+        body += data.toString();
+    }); 
+    // Cuando acabe de enviarnos los datos, enviara el evento end
+    req.on('end', () => {
+        console.log("Recepcion de datos finalizada");
+        // Convertimos los datos a un objeto JSON
+        let info = toJSON(body); 
+        console.log("Datos: ", info); 
+        // Comprovamos que el usuario no existe en la base de datos
+        
+        // Comprobamos que la informacion es correcta antes de hacer el login
+        res.render('login'); 
+    });
 }); 
 
 // Ruta para el Chat
@@ -92,7 +113,7 @@ router.get('/chat',(req, res) => {
 
 /* -----------------  FIN  ----------------- */
 
-/* -----------------  FUNCIONE PERSONALIZADAS  ----------------- */
+/* -----------------  FUNCIONES PERSONALIZADAS  ----------------- */
 
 function toJSON(data) {
     // Convertimos los datos passados a JSON
