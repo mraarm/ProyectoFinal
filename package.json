@@ -1,0 +1,33 @@
+{
+  "name": "proyectofinal",
+  "version": "1.0.0",
+  "description": "Proyecto de desarrollo web en NODEJS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mraarm/ProyectoFinal.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Express.js",
+    "Socket.io"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mraarm/ProyectoFinal/issues"
+  },
+  "homepage": "https://github.com/mraarm/ProyectoFinal#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.2.12",
+    "nodemon": "^1.18.4",
+    "socket.io": "^2.1.1"
+  }
+}
