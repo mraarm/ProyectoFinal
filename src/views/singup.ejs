@@ -20,6 +20,11 @@
         Apellidos: <input type="text" name="lastname" id="lastname"> <br>
         Email: <input type="text" name="email" id="email"> <br>
         Nombre Usuario: <input type="text" name="username" id="username"> <br>
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger">
+              <%= message %>
+            </div>
+        <% } %>
         Contraseña: <input type="text" name="password" id="password"> <br>
         <button type="submit"> Sing Up </button>
     </form>

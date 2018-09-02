@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 // MONGO MODEL: Cargamos los modelos de moongoose
 const User = require('./../models/user'); 
 
-// URL: Sirve para tratar la URL que nos piden 
-const url = require('url'); 
+// BCRYPT: Srive para crear un hash y asi codificar la contraseña
+const bcrypt =  require('bcrypt');
 
 /* -----------------    FIN   -----------------*/
 
@@ -18,12 +18,12 @@ const url = require('url');
 
 // Creamos la connexion con la base de datos MongoDB, en el localhost
 mongoose.connect('mongodb://localhost/nodejs', { useNewUrlParser: true })
-    .then(() => {
-        console.log("Conexion con MongoDB correcta");
-    })
-    .catch((err) => {
-        console.error(err); 
-    });
+.then(() => {
+    console.log("Conexion con MongoDB correcta");
+})
+.catch((err) => {
+    console.error(err); 
+});
 /* -----------------           FIN             -----------------*/
 
 /* ----------------- Router ----------------- */
@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
 // Ruta para el Login 
 router.get('/login',(req, res) => {
     console.log("GET - To file login.ejs");
-    res.render('login'); 
+    res.render('login', { message: "" }); 
 }); 
 
 // Ruta para el Login, valida el usuario i la contraseña
@@ -59,26 +59,16 @@ router.post('/login', (req, res) => {
     }); 
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
-        console.log("Recepcion de datos finalizada");
-        // Convertimos los datos a un onbbjeto JSON
-        let info = toJSON(body); 
-        console.log("Datos: ", info); 
-        let me = new User(info); 
-        me.save(); 
-        setTimeout(() => {
-            User.find((err, users) => { 
-            console.log(users); 
-            });
-        }, 1000); 
+        
         // Comprobamos que la informacion es correcta antes de hacer el login
-        res.render('login'); 
+        
     });
 }); 
 
 // Ruta para el Singup
 router.get('/singup',(req, res) => {
     console.log("GET - To file singup.ejs");
-    res.render('singup'); 
+    res.render('singup', { message: "" }); 
 });
 
 // Ruta para el Singup, guarda los datos en la base de datos
@@ -93,14 +83,7 @@ router.post('/singup', (req, res) => {
     }); 
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
-        console.log("Recepcion de datos finalizada");
-        // Convertimos los datos a un objeto JSON
-        let info = toJSON(body); 
-        console.log("Datos: ", info); 
-        // Comprovamos que el usuario no existe en la base de datos
         
-        // Comprobamos que la informacion es correcta antes de hacer el login
-        res.render('login'); 
     });
 }); 
 
@@ -115,6 +98,11 @@ router.get('/chat',(req, res) => {
 
 /* -----------------  FUNCIONES PERSONALIZADAS  ----------------- */
 
+/**
+* Funcion que nos convierte un String en un JSON 
+* 
+* @param {String} data 
+*/
 function toJSON(data) {
     // Convertimos los datos passados a JSON
     let info = {}; 
@@ -130,7 +118,20 @@ function toJSON(data) {
     return info; 
 }
 
-/* -----------------             FIN           ----------------- */
+/**
+ * Esta funcion nos comprueba si existe el nombre de usuario
+ * 
+ * @param {String} username 
+ */
+function existUser(username) {
+    let found =  { "username": username }; 
+    let exist = true; 
+    User.find(found,(err, docs) => {
+        if (docs === []) exist = false;
+    });
+    return exist;
+}
+/* -----------------             FIN            ----------------- */
 
 /* -----------------  EXPORT  ----------------- */
 

@@ -16,6 +16,11 @@
 <body>
     <% include parts/nav %> 
     <form action="/login" method="post">
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger">
+              <%= message %>
+            </div>
+        <% } %>
         <input type="text" name="username" id="username" placeholder="Username">
         <input type="password" name="password" id="password" placeholder="Password">
         <button type="submit"> Log In </button>
