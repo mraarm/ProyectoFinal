@@ -38,33 +38,28 @@ const router = express.Router();
 // Ruta para el inicio
 router.get('/', (req, res) => {
     console.log("GET - To file index.ejs");
-
     res.render('index');
 }); 
 
 // Ruta para el Login 
 router.get('/login',(req, res) => {
     console.log("GET - To file login.ejs");
-
     res.render('login', { message: "" }); 
 }); 
 
 // Ruta para el Login, valida el usuario i la contraseña
 router.post('/login', (req, res) => {
-    
     console.log("Comprovando datos para hacer el LOGIN\n");
-    
     // Creamos una variable donde se guardara los parametros
     let body = ''; 
-
     // Cada vez que recibimos un chunk (stream que contiene los datos)
     req.on('data', (data) => {
         console.log("Recibiendo datos", data.toString());
         body += data.toString();
     }); 
-
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
+<<<<<<< HEAD
 
         console.log("Recepcion de datos finalizada");
 
@@ -88,39 +83,32 @@ router.post('/login', (req, res) => {
                 console.log("DENTRO FUNCION", doc);              
             } 
         );
+=======
+        
+        // Comprobamos que la informacion es correcta antes de hacer el login
+        
+>>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
     });
 }); 
 
 // Ruta para el Singup
 router.get('/singup',(req, res) => {
     console.log("GET - To file singup.ejs");
-
     res.render('singup', { message: "" }); 
 });
 
 // Ruta para el Singup, guarda los datos en la base de datos
 router.post('/singup', (req, res) => {
-
     console.log("Comprovando datos para hacer el SINGUP\n");
-
     // Creamos una variable donde se guardara los parametros
     let body = ''; 
-
     // Cada vez que recibimos un chunk (stream que contiene los datos)
     req.on('data', (data) => {
         console.log("Recibiendo datos"/*, data.toString()*/);
         body += data.toString();
     }); 
-
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
-        
-        console.log("Recepcion de datos finalizada");
-
-        // Convertimos os datos en un objeto JSON
-        body = toJSON(body); 
-
-        // 
         
     });
 }); 
@@ -128,7 +116,6 @@ router.post('/singup', (req, res) => {
 // Ruta para el Chat
 router.get('/chat',(req, res) => {
     console.log("GET - To file chat.ejs");
-
     res.render('chat'); 
 }); 
 
@@ -143,22 +130,16 @@ router.get('/chat',(req, res) => {
 * @param {String} data 
 */
 function toJSON(data) {
-
     // Convertimos los datos passados a JSON
     let info = {}; 
-
     // Como la cadena tiene el formato key=value&key=value, etc..a
     // creamos un array con cada pareja de valores y entonces 
     // montamos el objeto json
     data.split('&').forEach(element => {
-
-        // Guardamos los valores de cada pareja de valores 
         let partial = element.split('=');
-
         // Añadimos cada clave, valor
         info[partial[0]] = partial[1]; 
     }); 
-
     // Devolvemos el obejto
     return info; 
 }
@@ -166,13 +147,21 @@ function toJSON(data) {
 /**
  * Esta funcion nos comprueba si existe el nombre de usuario
  * 
- * @param {String} info
- * @param {String} type 
+ * @param {String} username 
  */
+<<<<<<< HEAD
 function isUsed(info, type) {
     
+=======
+function existUser(username) {
+    let found =  { "username": username }; 
+    let exist = true; 
+    User.find(found,(err, docs) => {
+        if (docs === []) exist = false;
+    });
+    return exist;
+>>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
 }
-
 /* -----------------             FIN            ----------------- */
 
 /* -----------------  EXPORT  ----------------- */
