@@ -61,7 +61,11 @@ app.use(session({
 // Creamos una variable que contiene el servidor escuchando en el puerto 3000 o el proporcionado por la maquina
 const server = app.listen( app.get('port'), () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     console.log( ("\n" + "##  Server running on port:" + app.get('port') + "\n").bold.magenta);
+=======
+    console.log("Server running on port:", app.get('port'));
+>>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
 =======
     console.log("Server running on port:", app.get('port'));
 >>>>>>> parent of be59fd1... Añadido Colors, creado login y singup

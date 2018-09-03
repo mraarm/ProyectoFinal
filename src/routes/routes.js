@@ -60,6 +60,7 @@ router.post('/login', (req, res) => {
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         console.log("Recepcion de datos finalizada");
 
@@ -83,6 +84,11 @@ router.post('/login', (req, res) => {
                 console.log("DENTRO FUNCION", doc);              
             } 
         );
+=======
+        
+        // Comprobamos que la informacion es correcta antes de hacer el login
+        
+>>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
 =======
         
         // Comprobamos que la informacion es correcta antes de hacer el login
@@ -150,9 +156,12 @@ function toJSON(data) {
  * @param {String} username 
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 function isUsed(info, type) {
     
 =======
+=======
+>>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
 function existUser(username) {
     let found =  { "username": username }; 
     let exist = true; 
