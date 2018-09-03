@@ -43,7 +43,7 @@ app.use(express.static(path.resolve(__dirname, './public')));
 // Importamos las rutas de la carpeta rutas
 const routes = require('./routes/routes'); 
 
-// Definimos las rutas 
+// Definimos las rutas, que usaremos para la web
 app.use('/', routes); 
 
 /* -----------------       FIN          ----------------- */
@@ -51,11 +51,13 @@ app.use('/', routes);
 /* ----------------- MIDDLEWARE ----------------- */
 
 // Ponemos expres-session para contraolar las sesiiones de los usuarios
-app.use(session({
-    secret: '3jn4jb3k5b43kjb*¨P?=)·LjnsjdkS·KDF',
-    saveUninitialized: false, 
-    resave: true
-})); 
+app.use(
+    session({
+            secret: 'WebDawProject201819',
+            saveUninitialized: false, 
+            resave: true
+    })
+); 
 
 /* -----------------      FIN   ----------------- */
 

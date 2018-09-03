@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema(
         username: {
             type: String, 
             required: true, 
-            unique: true
+            index: { unique: true }
         },
         password: {
             type: String, 
@@ -47,7 +47,7 @@ UserSchema.pre('save', function (next) {
     let user = this;
     bcrypt.hash(user.password, 10, function (err, hash){
       if (err) return next(err);
-      user.password = hash;
+      user.password = hash; 
       next();
     })
   });
