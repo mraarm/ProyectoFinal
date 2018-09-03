@@ -81,7 +81,7 @@ router.post('/login', (req, res) => {
                    };  
         }
 
-        // Comprovamos lo valores 
+        // Comprovamos los valores 
         User.findOne( 
             body,
             (err, doc) => {
@@ -171,24 +171,6 @@ function toJSON(data) {
  */
 function isUsed(info, type) {
     
-    // Creamos el objeto para encontra-lo
-    let found =  { "${type}": info };
-    
-    // Variable que nos dira si existe o no
-    let exist = true; 
-
-    // Buscamos el usuario
-    User.find(
-        found,
-        (err, docs) => {
-            
-            // Si no encontramos el documento devolvemos false 
-            if (docs === []) exist = false;
-        }
-    );
-    
-    // Devolvemos si existe o no
-    return exist;
 }
 
 /* -----------------             FIN            ----------------- */

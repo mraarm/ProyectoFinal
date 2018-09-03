@@ -63,7 +63,7 @@ app.use(session({
 
 // Creamos una variable que contiene el servidor escuchando en el puerto 3000 o el proporcionado por la maquina
 const server = app.listen( app.get('port'), () => {
-    console.log( ("\n" + "##  Server running on port:" + app.get('port') + "\n").bgWhite.green);
+    console.log( ("\n" + "##  Server running on port:" + app.get('port') + "\n").bold.magenta);
 });
 
 // Creamos el servidor de SOCKET.IO usando el servidor que ya habiamos creado
@@ -74,7 +74,7 @@ const io =  socketio(server);
 /* ----------------- CONNEXION SOCKETS ----------------- */
                                                          
 io.on('connection', (socket) => {                        
-    console.log("--------------------------------")      
+    console.log("---------- SOCKETS.IO ----------- \n")      
     console.log("SOCKET ID:", socket.id);                
     console.log("SOCKET ROOM:", socket.rooms);           
 });                                                      
