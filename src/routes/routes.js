@@ -59,8 +59,6 @@ router.post('/login', (req, res) => {
     }); 
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         console.log("Recepcion de datos finalizada");
 
@@ -155,8 +153,7 @@ function toJSON(data) {
  * 
  * @param {String} username 
  */
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 function isUsed(info, type) {
     
 =======
