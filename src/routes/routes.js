@@ -1,4 +1,4 @@
-/* ----------------- REQUIRES ----------------- */
+  /* ----------------- REQUIRES ----------------- */
 
 // EXPRESS: Framework para simplifica la creacion del servidor
 const express = require('express'); 
@@ -49,83 +49,132 @@ router.get('/login',(req, res) => {
 
 // Ruta para el Login, valida el usuario i la contraseña
 router.post('/login', (req, res) => {
+
     console.log("Comprovando datos para hacer el LOGIN\n");
     // Creamos una variable donde se guardara los parametros
     let body = ''; 
+
     // Cada vez que recibimos un chunk (stream que contiene los datos)
     req.on('data', (data) => {
         console.log("Recibiendo datos", data.toString());
         body += data.toString();
     }); 
+
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
-<<<<<<< HEAD
 
         console.log("Recepcion de datos finalizada");
 
         // Convertimos la informacion a JSON 
         body = toJSON(body);
 
-        // Miramos si es el usuario o el mail
+        // Variable donde guardamos el usuario o el username
+        let find = {}; 
+        
+        // Por defecto buscaremos por el usuario
+        find['username'] = body.username; 
+
+        // En caso de que nos den el mail
         if ( (body.username).indexOf('@') === -1 ) {
-
+ 
             console.log("Han usado el mail @");
+            
+            // Buscaremos por el mail
+            find["email"] = body.username;
 
-            body = { "email": (body.username).replace('%', '@'), 
-                     "password": body.password
-                   };  
         }
 
         // Comprovamos los valores 
-        User.findOne( 
-            body,
-            (err, doc) => {
-                console.log("DENTRO FUNCION", doc);              
-            } 
-        );
-=======
+        User.findOne( body, (err, doc) => {          
+            
+            // Si hay un error lo buscamos
+            if (err) console.log(err); 
+            
+            // Si el documento no existe, no existe el usuario
+            if (doc === []) res.render('login', { message: " No existe el usuario " }); 
+            else { 
+                bcrypt.compare(body.username, doc.password, (err, same) => {
+
+                    // Creamos un string para enviar los datos del usuario que hace el login
+                    let user = ""; 
+                    
+                    if (same) {
+                        
+                        for (key in doc) {
+                            user += key + "=" + doc.key + "&"; 
+                        }
+
+                        // Redirecionamos a la pagina de el usuario
+                        res.redirect('/profile?' + user); 
+
+                    } else {
+
+                        // La contraseña no coincide 
+                        res.render('login', { message: " Contraseña equivocada " });
+
+                    }
+                }); 
+            }
+        });
         
         // Comprobamos que la informacion es correcta antes de hacer el login
         
->>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
-=======
-        
-        // Comprobamos que la informacion es correcta antes de hacer el login
-        
->>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
-=======
-        
-        // Comprobamos que la informacion es correcta antes de hacer el login
-        
->>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
-    });
+    }); 
 }); 
 
 // Ruta para el Singup
 router.get('/singup',(req, res) => {
     console.log("GET - To file singup.ejs");
-    res.render('singup', { message: "" }); 
+    res.render('singup', { email: "", username: "" } ); 
 });
 
 // Ruta para el Singup, guarda los datos en la base de datos
 router.post('/singup', (req, res) => {
+
     console.log("Comprovando datos para hacer el SINGUP\n");
+
     // Creamos una variable donde se guardara los parametros
     let body = ''; 
+
     // Cada vez que recibimos un chunk (stream que contiene los datos)
     req.on('data', (data) => {
-        console.log("Recibiendo datos"/*, data.toString()*/);
+
+        console.log("Recibiendo datos");
+
         body += data.toString();
+
     }); 
+
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
+
+        console.log("Comprovando datos para hacer el SINGUP\n");
         
+        // Creamos el objeto que guardaremos
+        body = toJSON(body); 
+
+        // Creamos el usuario
+        let newUser = new User(body); 
+
+        // Guardamos el usuario
+        newUser.save()
+            .then( () => { 
+                res.render('profile');
+            })
+            .catch( (err) => {
+                if ( (err.errmsg).indexOf('username') !== -1 ) res.render('singup', { email: "", username: " Username usado" } );
+                else if ( (err.errmsg).indexOf('email') !== -1 ) res.render('singup', { email: "Email usado", username: "" } );
+                else console.log(err); 
+            }); 
     });
 }); 
 
-// Ruta para el Chat
-router.get('/chat',(req, res) => {
+// Ruta para el perfil
+router.get('/perfil',(req, res) => {
+
     console.log("GET - To file chat.ejs");
+    conosle.log(req.body); 
+    
     res.render('chat'); 
 }); 
 
@@ -140,43 +189,26 @@ router.get('/chat',(req, res) => {
 * @param {String} data 
 */
 function toJSON(data) {
+
     // Convertimos los datos passados a JSON
     let info = {}; 
+    
     // Como la cadena tiene el formato key=value&key=value, etc..a
     // creamos un array con cada pareja de valores y entonces 
     // montamos el objeto json
     data.split('&').forEach(element => {
+    
         let partial = element.split('=');
+    
         // Añadimos cada clave, valor
         info[partial[0]] = partial[1]; 
+    
     }); 
+    
     // Devolvemos el obejto
     return info; 
 }
 
-/**
- * Esta funcion nos comprueba si existe el nombre de usuario
- * 
- * @param {String} username 
- */
-<<<<<<< HEAD
-
-function isUsed(info, type) {
-    
-=======
-=======
->>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
-=======
->>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
-function existUser(username) {
-    let found =  { "username": username }; 
-    let exist = true; 
-    User.find(found,(err, docs) => {
-        if (docs === []) exist = false;
-    });
-    return exist;
->>>>>>> parent of be59fd1... Añadido Colors, creado login y singup
-}
 /* -----------------             FIN            ----------------- */
 
 /* -----------------  EXPORT  ----------------- */

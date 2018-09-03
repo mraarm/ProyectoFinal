@@ -23,7 +23,8 @@ const UserSchema = new mongoose.Schema(
         }, 
         username: {
             type: String, 
-            required: true
+            required: true, 
+            unique: true
         },
         password: {
             type: String, 
@@ -31,7 +32,8 @@ const UserSchema = new mongoose.Schema(
         }, 
         email: {
             type: String, 
-            required: false
+            required: true, 
+            unique: true
         }
     }
 ); 
