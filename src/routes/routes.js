@@ -19,7 +19,7 @@
   // Creamos la connexion con la base de datos MongoDB, en el localhost
   mongoose.connect('mongodb://localhost/nodejs', { useNewUrlParser: true })
   .then(() => {
-    console.log("Conexion con MongoDB correcta");
+    console.log("\n### Conexion con MongoDB correcta".bold.yellow);
 })
 .catch((err) => {
     console.error(err); 
@@ -37,27 +37,33 @@ const router = express.Router();
 
 // Ruta para el inicio
 router.get('/', (req, res) => {
-    console.log("GET - To file index.ejs");
+
+    console.log("GET - To file index.ejs".green);
+    
     res.render('index');
+
 }); 
 
 // Ruta para el Login 
 router.get('/login',(req, res) => {
-    console.log("GET - To file login.ejs");
+
+    console.log("GET - To file login.ejs".green);
+    
     res.render('login', { message: "" }); 
+
 }); 
 
 // Ruta para el Login, valida el usuario i la contraseña
 router.post('/login', (req, res) => {
     
-    console.log("\nComprovando datos para hacer el LOGIN\n");
+    console.log("\nLOGEANDO USUARIO\n".bgBlack.cyan);
     // Creamos una variable donde se guardara los parametros
     let body = ''; 
     
     // Cada vez que recibimos un chunk (stream que contiene los datos)
     req.on('data', (data) => {
         
-        console.log("Recibiendo datos", data.toString());
+        console.log("\nRecibiendo datos " + data.toString() +"\n");
         
         body += data.toString();
     }); 
@@ -65,7 +71,7 @@ router.post('/login', (req, res) => {
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
         
-        console.log("Recepcion de datos finalizada");
+        console.log("\nDatos recibidos\n");
         
         // Convertimos la informacion a JSON 
         body = toJSON(body);
@@ -76,12 +82,15 @@ router.post('/login', (req, res) => {
         // En caso de que nos den el mail
         if ( (body.username).indexOf('%40') !== -1 ) {
             
-            console.log("\nHan usado el mail @\n");
+            console.log("\nMail usado para el login\n");
             
             // Buscaremos por el mail
             find["email"] = body.username;
             
         } else {
+
+            console.log("\nUsername usado para el login\n");
+
             // Por defecto buscaremos por el usuario
             find['username'] = body.username; 
         }
@@ -92,25 +101,48 @@ router.post('/login', (req, res) => {
         // Comprobamos que la informacion es correcta antes de hacer el login
         User.find(find, 'password').cursor()
         .on('data', (data) => {
+
+            console.log( "\nDatos USUARIO pedido: \n" + data + "\n");
+            
             user = data; 
-            console.log( "JSON", user); 
+        
         })
         .on('end', () => { 
-            // Si no hay documento
+            // Comprovamos si existe el usuario
             if (user) {
-                
+
+                // Guardamos la session del usuario en un obejto
+                let sess = req.session; 
+
+                console.log("SESSION", sess); 
+
+                // Si existe gaurdamos las contraseñas, la hasheada y la normal
                 let hash = user.password;
                 let password = body.password; 
                 
-                // console.log(hash, password);
-                
+                console.log("\nContraseña en HASH: " + hash + ".\nConstraseña: " + password + "\n");
                 
                 if (bcrypt.compareSync(body.password, user["password"])) {
-                    res.render('profile'); 
+                    
+                    // La contraseña es correcta añadimos la _id del usuario a la session de express-session
+                    req.session.userId = user._id;
+
+                    // Redirigimos a la pagina de perfil
+                    res.redirect('/perfil'); 
+
                 } else {
+
+                    // La contraseña es erronea
                     res.render('login', { message: "Contraseña incorrecta" });
+
                 }
-            } else res.render('login', { message: "El usuario no existe" }); 
+
+            } else {
+                
+                // No existe el usuario
+                res.render('login', { message: "El usuario no existe" }); 
+
+            }
         }); 
     }); 
 }); 
@@ -124,7 +156,7 @@ router.get('/singup',(req, res) => {
 // Ruta para el Singup, guarda los datos en la base de datos
 router.post('/singup', (req, res) => {
     
-    console.log("Comprovando datos para hacer el SINGUP\n");
+    console.log("\nSINGUPEANDO USUARIO\n".bgBlack.cyan);
     
     // Creamos una variable donde se guardara los parametros
     let body = ''; 
@@ -132,7 +164,7 @@ router.post('/singup', (req, res) => {
     // Cada vez que recibimos un chunk (stream que contiene los datos)
     req.on('data', (data) => {
         
-        console.log("Recibiendo datos");
+        console.log("\nRecibiendo datos\n");
         
         body += data.toString();
         
@@ -141,7 +173,7 @@ router.post('/singup', (req, res) => {
     // Cuando acabe de enviarnos los datos, enviara el evento end
     req.on('end', () => {
         
-        console.log("Comprovando datos para hacer el SINGUP\n");
+        console.log("\nDatos recibidos\n");
         
         // Creamos el objeto que guardaremos
         body = toJSON(body); 
@@ -152,12 +184,17 @@ router.post('/singup', (req, res) => {
         // Guardamos el usuario
         newUser.save()
         .then( () => { 
-            res.render('profile');
+
+            res.redirect('/login');
+        
         })
         .catch( (err) => {
+
+            // Comprovamos que es el que esta mal si mail o username
             if ( (err.errmsg).indexOf('username') !== -1 ) res.render('singup', { email: "", username: " Username usado" } );
             else if ( (err.errmsg).indexOf('email') !== -1 ) res.render('singup', { email: "Email usado", username: "" } );
-            else console.log(err); 
+            else console.log(err);
+
         }); 
     });
 }); 
@@ -165,8 +202,7 @@ router.post('/singup', (req, res) => {
 // Ruta para el perfil
 router.get('/perfil',(req, res) => {
     
-    console.log("GET - To file chat.ejs");
-    conosle.log(req.body); 
+    console.log("\nGET - To file chat.ejs\n");
     
     res.render('chat'); 
 }); 

@@ -50,18 +50,18 @@ UserSchema.pre('save', function (next) {
       user.password = hash; 
       next();
     })
-  });
+});
     
-    /* -----------            FIN             ----------- */
-    
-    /* ----------- MODELOS MONGO ----------- */
-    
-    const User = mongoose.model('users', UserSchema); 
-    
-    /* -----------      FIN      ----------- */
-    
-    /* ----------- EXPORTAMOS ----------- */
-    
-    module.exports = User; 
-    
-    /* -----------     FIN    ----------- */
+/* -----------            FIN             ----------- */
+
+/* ----------- MODELOS MONGO ----------- */
+
+const User = mongoose.model('users', UserSchema); 
+
+/* -----------      FIN      ----------- */
+
+/* ----------- EXPORTAMOS ----------- */
+
+module.exports = User; 
+
+/* -----------     FIN    ----------- */
