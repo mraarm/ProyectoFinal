@@ -8,9 +8,7 @@ const socket = io();
 
 // Funcion que contiene el comportamiento de la web
 function init() {
-    socket.on("here", () => {
-        socket.emit
-    }); 
+    
 }; 
 
 /* -----------        FIN         ----------- */

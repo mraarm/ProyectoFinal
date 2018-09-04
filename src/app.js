@@ -6,9 +6,6 @@ const express = require('express');
 // Creamos la app, que servira como servidor 
 const app  = express(); 
 
-// SOCKET.IO: Framework para el traspasso de datos a tiempo real
-const socketio = require('socket.io');  
-
 // EXPRES-SESSION: Modulo que sirve para manejar las sessiones de los usuarios
 const session = require('express-session'); 
 
@@ -56,7 +53,7 @@ app.use(session({
 const routes = require('./routes/routes'); 
 
 // Definimos las rutas, que usaremos para la web
-app.use('/', routes); 
+app.use('/', routes.router); 
 
 /* -----------------       FIN          ----------------- */
 
@@ -67,26 +64,7 @@ const server = app.listen( app.get('port'), function () {
     console.log( ("\n###   Servidor escuchando en el puerto: " + app.get("port") + "\n").bold.magenta);
 });
 
-// Creamos el servidor de SOCKET.IO usando el servidor que ya habiamos creado
-const io =  socketio(server); 
+// Enviamos el servidor a las rutas, para poder crear el server de socket.io
+routes.server = server; 
 
 /* -----------------        FIN       ----------------- */
-
-/* ----------------- CONNEXION SOCKETS ----------------- */
-                                                         
-io.on('connection', (socket) => {             
-
-    console.log("\n---------- SOCKETS.IO ----------- \n".red);      
-    console.log("SOCKET ID:", socket.id);                
-    console.log("SOCKET ROOM:", socket.rooms);
-    console.log("\n---------- SOCKETS.IO ----------- \n".red);
-
-    // Capturaremos el evento de cada login
-    socket.on('logged', (data) => {
-        socket.username = session.userId; 
-        console.log(socket.username);
-    }); 
-    
-});                                                      
-                                                         
-/* -----------------        FIN        ----------------- */

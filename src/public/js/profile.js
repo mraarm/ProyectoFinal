@@ -7,8 +7,8 @@ const socket = io();
 /* ----------- COMPORTAMIENTO WEB ----------- */
 
 // Funcion que contiene el comportamiento de la web
-window.onload = () => {
-    console.log(socket)
+window.onload = (socket) => {
+    console.log(socket.username); 
 };
 
 /* -----------        FIN         ----------- */

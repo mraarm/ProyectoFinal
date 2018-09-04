@@ -1,24 +1,30 @@
-  /* ----------------- REQUIRES ----------------- */
-  
-  // EXPRESS: Framework para simplifica la creacion del servidor
-  const express = require('express'); 
-  
-  // MOONGOOSE: Sirve para establecer la connexion a la base de datos
-  const mongoose = require('mongoose');
-  
-  // MONGO MODEL: Cargamos los modelos de moongoose
-  const User = require('./../models/user'); 
-  
-  // BCRYPT: Srive para crear un hash y asi codificar la contraseña
-  const bcrypt =  require('bcrypt');
-  
-  /* -----------------    FIN   -----------------*/
-  
-  /* -----------------    CONNECTION MONGOOSE   -----------------*/
-  
-  // Creamos la connexion con la base de datos MongoDB, en el localhost
-  mongoose.connect('mongodb://localhost/nodejs', { useNewUrlParser: true })
-  .then(() => {
+/* ----------------- REQUIRES ----------------- */
+
+// EXPRESS: Framework para simplifica la creacion del servidor
+const express = require('express'); 
+
+// MOONGOOSE: Sirve para establecer la connexion a la base de datos
+const mongoose = require('mongoose');
+
+// MONGO MODEL: Cargamos los modelos de moongoose
+const User = require('./../models/user'); 
+
+// BCRYPT: Srive para crear un hash y asi codificar la contraseña
+const bcrypt =  require('bcrypt');
+
+// VARIABLE: contiene el socket que usaremos
+let server; 
+
+// SOCKET.IO: Framework para el traspasso de datos a tiempo real
+const io = require('socket.io')(server);  
+
+/* -----------------    FIN   -----------------*/
+
+/* -----------------    CONNECTION MONGOOSE   -----------------*/
+
+// Creamos la connexion con la base de datos MongoDB, en el localhost
+mongoose.connect('mongodb://localhost/nodejs', { useNewUrlParser: true })
+.then(() => {
     console.log("\n### Conexion con MongoDB correcta".bold.yellow);
 })
 .catch((err) => {
@@ -37,20 +43,20 @@ const router = express.Router();
 
 // Ruta para el inicio
 router.get('/', (req, res) => {
-
+    
     console.log("GET - To file index.ejs".green);
     
     res.render('index');
-
+    
 }); 
 
 // Ruta para el Login 
 router.get('/login',(req, res) => {
-
+    
     console.log("GET - To file login.ejs".green);
     
     res.render('login', { message: "" }); 
-
+    
 }); 
 
 // Ruta para el Login, valida el usuario i la contraseña
@@ -88,9 +94,9 @@ router.post('/login', (req, res) => {
             find["email"] = body.username;
             
         } else {
-
+            
             console.log("\nUsername usado para el login\n");
-
+            
             // Por defecto buscaremos por el usuario
             find['username'] = body.username; 
         }
@@ -99,16 +105,16 @@ router.post('/login', (req, res) => {
         let user = null; 
         
         // Comprobamos que la informacion es correcta antes de hacer el login
-        User.find(find, 'password').cursor()
+        User.find(find).cursor()
         .on('data', (data) => {
-
+            
             console.log( "\nDatos USUARIO pedido: \n" + data + "\n");
             
             user = data; 
-        
+            
         })
         .on('end', () => { 
-
+            
             // Comprovamos si existe el usuario
             if (user) {
                 
@@ -121,23 +127,23 @@ router.post('/login', (req, res) => {
                 if (bcrypt.compareSync(body.password, user["password"])) {
                     
                     // La contraseña es correcta añadimos la _id del usuario a la session de express-session
-                    req.session.userId = user._id;
-
+                    req.session.userId = user; 
+                    
                     // Redirigimos a la pagina de perfil
-                    res.redirect('/perfil'); 
-
+                    res.redirect('/profile'); 
+                    
                 } else {
-
+                    
                     // La contraseña es erronea
                     res.render('login', { message: "Contraseña incorrecta" });
-
+                    
                 }
-
+                
             } else {
                 
                 // No existe el usuario
                 res.render('login', { message: "El usuario no existe" }); 
-
+                
             }
         }); 
     }); 
@@ -145,11 +151,11 @@ router.post('/login', (req, res) => {
 
 // Ruta para el Singup
 router.get('/singup',(req, res) => {
-
+    
     console.log("GET - To file singup.ejs");
-
+    
     res.render('singup', { email: "", username: "" } ); 
-
+    
 });
 
 // Ruta para el Singup, guarda los datos en la base de datos
@@ -183,27 +189,47 @@ router.post('/singup', (req, res) => {
         // Guardamos el usuario
         newUser.save()
         .then( () => { 
-
+            
             res.redirect('/login');
-        
+            
         })
         .catch( (err) => {
-
+            
             // Comprovamos que es el que esta mal si mail o username
             if ( (err.errmsg).indexOf('username') !== -1 ) res.render('singup', { email: "", username: " Username usado" } );
             else if ( (err.errmsg).indexOf('email') !== -1 ) res.render('singup', { email: "Email usado", username: "" } );
             else console.log(err);
-
+            
         }); 
     });
 }); 
 
 // Ruta para el perfil
-router.get('/perfil',(req, res) => {
+router.get('/profile',(req, res) => {
     
     console.log("\nGET - To file chat.ejs\n");
+
+    if ( req.session.userId ) {
+
+        io.on('connected', (socket) => {
+            socket.username = req.session.userId.username; 
+        }); 
+
+        console.log(req.session); 
+
+        res.render('profile',
+            { 
+                username: req.session.userId.username,
+                email: (req.session.userId.email).replace('%40', '@'), 
+                fullName: (req.session.userId.name + " " + req.session.userId.lastname).replace('\+', ' ')
+            }
+        ); 
     
-    res.render('perfil'); 
+    } else {
+    
+        res.render('login', { message: "Necessitas hacer LOGIN" });
+
+    }
 
 }); 
 
@@ -242,6 +268,7 @@ function toJSON(data) {
 
 /* -----------------  EXPORT  ----------------- */
 
-module.exports = router; 
+module.exports.router = router; 
+module.exports.server = server; 
 
 /* -----------------    FIN   ----------------- */
