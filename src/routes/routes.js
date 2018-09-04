@@ -63,7 +63,7 @@ router.post('/login', (req, res) => {
     // Cada vez que recibimos un chunk (stream que contiene los datos)
     req.on('data', (data) => {
         
-        console.log("\nRecibiendo datos " + data.toString() +"\n");
+        console.log("\nRecibiendo datos \n");
         
         body += data.toString();
     }); 
@@ -80,7 +80,7 @@ router.post('/login', (req, res) => {
         let find = {}; 
         
         // En caso de que nos den el mail
-        if ( (body.username).indexOf('%40') !== -1 ) {
+        if ( body.username && (body.username).indexOf('%40') !== -1 ) {
             
             console.log("\nMail usado para el login\n");
             
@@ -108,14 +108,10 @@ router.post('/login', (req, res) => {
         
         })
         .on('end', () => { 
+
             // Comprovamos si existe el usuario
             if (user) {
-
-                // Guardamos la session del usuario en un obejto
-                let sess = req.session; 
-
-                console.log("SESSION", sess); 
-
+                
                 // Si existe gaurdamos las contraseñas, la hasheada y la normal
                 let hash = user.password;
                 let password = body.password; 
@@ -149,8 +145,11 @@ router.post('/login', (req, res) => {
 
 // Ruta para el Singup
 router.get('/singup',(req, res) => {
+
     console.log("GET - To file singup.ejs");
+
     res.render('singup', { email: "", username: "" } ); 
+
 });
 
 // Ruta para el Singup, guarda los datos en la base de datos
@@ -204,7 +203,8 @@ router.get('/perfil',(req, res) => {
     
     console.log("\nGET - To file chat.ejs\n");
     
-    res.render('chat'); 
+    res.render('perfil'); 
+
 }); 
 
 

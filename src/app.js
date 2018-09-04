@@ -74,11 +74,19 @@ const io =  socketio(server);
 
 /* ----------------- CONNEXION SOCKETS ----------------- */
                                                          
-io.on('connection', (socket) => {                
+io.on('connection', (socket) => {             
+
     console.log("\n---------- SOCKETS.IO ----------- \n".red);      
     console.log("SOCKET ID:", socket.id);                
     console.log("SOCKET ROOM:", socket.rooms);
     console.log("\n---------- SOCKETS.IO ----------- \n".red);
+
+    // Capturaremos el evento de cada login
+    socket.on('logged', (data) => {
+        socket.username = session.userId; 
+        console.log(socket.username);
+    }); 
+    
 });                                                      
                                                          
 /* -----------------        FIN        ----------------- */

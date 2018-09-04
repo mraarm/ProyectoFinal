@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="/css/chat.css">
     <!-- == -->
     <!-- JS -->
-    <script src="/js/chat.js"></script>
+    <script src="/js/login.js"></script>
     <!-- == -->
 </head>
 <!-- ====== ==== ====== -->
 <!-- ====== BODY ====== -->
-<body>
+<body onload="init()">
     <% include parts/nav %> 
     <form action="/login" method="post">
         <input type="text" name="username" id="username" placeholder="Username">
@@ -23,7 +23,7 @@
               <%= message %>
             </div>
         <% } %>
-        <button type="submit"> Log In </button>
+        <div id="submit"> <button type="submit"> Log In </button> </div>
     </form>
     <% include parts/footer %>
 </body>
