@@ -1,19 +1,23 @@
 <html>
-    <head>
-        <%include parts/head %>
-        <% include parts/bootstrap %> 
-        <!-- CSS -->   
-        <link rel="stylesheet" href="/css/base.css">
-        <link rel="stylesheet" href="/css/profile.css">
-        <!-- == -->
-        <!-- JS -->
-        <script src="/js/profile.js"></script>
-        <!-- == -->
-        <title> PROFILE </title>
-    </head>
-    <body>
+<head>
+    <%include parts/head %>
+    <% include parts/bootstrap %> 
+    <!-- CSS -->   
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <!-- == -->
+    <!-- JS -->
+    <script src="/js/profile.js"></script>
+    <!-- == -->
+    <title> PROFILE </title>
+</head>
+<body>
+    <% include parts/nav %> 
+    <div id="body">
         <div id="username"> <h1> <%= username %> </h1> </div>
         <div id="fullName"> <h1> <%= fullName %> </h1> </div>
         <div id="email"> <h1> <%= email %> </h1> </div>
-    </body>
+    </div>
+    <% include parts/footer %>
+</body>
 </html>

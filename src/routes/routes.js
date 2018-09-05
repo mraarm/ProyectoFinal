@@ -209,14 +209,15 @@ router.get('/profile',(req, res) => {
     
     console.log("\nGET - To file chat.ejs\n");
 
+    // Comprovamos si existe el objeto userId, para saber si esta logeado
     if ( req.session.userId ) {
 
+        // Añadimos el nombre de usuario al socket
         io.on('connected', (socket) => {
             socket.username = req.session.userId.username; 
-        }); 
+        });
 
-        console.log(req.session); 
-
+        // Renderizamos el user, con los datos de este
         res.render('profile',
             { 
                 username: req.session.userId.username,
@@ -226,13 +227,13 @@ router.get('/profile',(req, res) => {
         ); 
     
     } else {
-    
+        
+        // Si no se ha loggeado lo chutamos
         res.render('login', { message: "Necessitas hacer LOGIN" });
 
     }
 
 }); 
-
 
 /* -----------------  FIN  ----------------- */
 

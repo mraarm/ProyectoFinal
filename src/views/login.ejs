@@ -13,18 +13,16 @@
 </head>
 <!-- ====== ==== ====== -->
 <!-- ====== BODY ====== -->
-<body onload="init()">
+<body>
     <% include parts/nav %> 
-    <form action="/login" method="post">
-        <input type="text" name="username" id="username" placeholder="Username">
-        <input type="password" name="password" id="password" placeholder="Password">
-        <% if (message.length > 0) { %>
-            <div class="alert alert-danger">
-              <%= message %>
-            </div>
-        <% } %>
-        <div id="submit"> <button type="submit"> Log In </button> </div>
-    </form>
+    <div id="body">
+        <form action="/login" method="post">
+            Username: 
+            <input type="text" name="username" id="username">
+            Password: 
+            <input type="password" name="password" id="password">
+        </form>
+    </div>
     <% include parts/footer %>
 </body>
 <!-- ====== ==== ====== -->

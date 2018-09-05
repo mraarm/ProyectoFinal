@@ -15,24 +15,26 @@
 <!-- ====== BODY ====== -->
 <body>
     <% include parts/nav %> 
-    <form action="/singup" method="post" autocomplete="off">
-        Nombre: <input type="text" name="name" id="name"> <br>
-        Apellidos: <input type="text" name="lastname" id="lastname"> <br>
-        Email: <input type="email" name="email" id="email"> <br>
-        <% if (email.length > 0 ) { %>
-            <div class="alert alert-danger h-5">
-              <%= email %>
-            </div>
-        <% } %>
-        Username: <input type="text" name="username" id="username"> <br>
-        <% if (username.length > 0 ) { %>
-            <div class="alert alert-danger">
-              <%= username %>
-            </div>
-        <% } %>
-        Contraseña: <input type="password" name="password" id="password"> <br>
-        <button type="submit"> Sing Up </button>
-    </form>
+    <div id="body">
+        <form action="/singup" method="post" autocomplete="off">
+            Nombre: <input type="text" name="name" id="name"> <br>
+            Apellidos: <input type="text" name="lastname" id="lastname"> <br>
+            Email: <input type="email" name="email" id="email"> <br>
+            <% if (email.length > 0 ) { %>
+                <div class="alert alert-danger h-5">
+                    <%= email %>
+                </div>
+            <% } %>
+            Username: <input type="text" name="username" id="username"> <br>
+            <% if (username.length > 0 ) { %>
+                <div class="alert alert-danger">
+                    <%= username %>
+                </div>
+            <% } %>
+            Contraseña: <input type="password" name="password" id="password"> <br>
+            <button type="submit"> Sing Up </button>
+        </form>
+    </div>
     <% include parts/footer %>
 </body>
 <!-- ====== ==== ====== -->

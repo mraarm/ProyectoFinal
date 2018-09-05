@@ -2,7 +2,7 @@
 <!-- ====== HEAD ====== -->
 <head>
     <% include parts/head %> 
-    <% include parts/bootstrap %> 
+    <!-- <% include parts/bootstrap %>  -->
     <!-- CSS -->   
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/index.css">
@@ -14,33 +14,27 @@
 <!-- ====== ==== ====== -->
 <!-- ====== BODY ====== -->
 <body>
-    <div>
-        <div>
-            <% include parts/nav %> 
+    <% include parts/nav %>
+    <div id="body">
+        <!-- TEXTO AQUI -->
+        <div id="explicacion">
+            <p>
+                Esta pàgina forma parte de un proyecto mayor que consiste en la creación 
+                de un servidor web, desarrollado en Node.js, framework para JavaScript en
+                lado servidor. 
+                
+                Usamos varios modulos, para la creación del servidor usamos el modulo Express.js
+                asi es más simple. Para todos los elementos que funcionan a timepo real usan el 
+                framework Socket.io 
+                
+                A parte de todos los frameworks usamos modulos propios de Node.js para la connexion 
+                con la base de datos, el manejo de las diferentes sessiones de los usuarios, la seguridad, 
+                modulos para la encriptacion de los passwords, etc...
+            </p>
         </div>
-        <div>
-            <!-- TEXTO AQUI -->
-            <div>
-                <p>
-                    Esta pàgina forma parte de un proyecto mayor que consiste en la creación 
-                    de un servidor web, desarrollado en Node.js, framework para JavaScript en
-                    lado servidor. 
-                    
-                    Usamos varios modulos, para la creación del servidor usamos el modulo Express.js
-                    asi es más simple. Para todos los elementos que funcionan a timepo real usan el 
-                    framework Socket.io 
-                    
-                    A parte de todos los frameworks usamos modulos propios de Node.js para la connexion 
-                    con la base de datos, el manejo de las diferentes sessiones de los usuarios, la seguridad, 
-                    modulos para la encriptacion de los passwords, etc...
-                </p>
-            </div>
-            <h1> <a href="/login"> LOG IN </a> or <a href="/singup"> SING UP </a> </h1>
-        </div>
-        <div>
-            <% include parts/footer %>
-        </div>
+        <h1> <a href="/login"> LOG IN </a> or <a href="/singup"> SING UP </a> </h1>
     </div>
+    <% include parts/footer %>
 </body>
 <!-- ====== ==== ====== -->
 </html>
